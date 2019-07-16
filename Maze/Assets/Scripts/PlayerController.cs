@@ -1,16 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb2d;
     public float speed;
+    private int count;
+    public Text countText;
+    public Text winText;
     public float jumpForce;
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D> ();
+        count = 0;
+        winText.text = "";
+        SetCountText ();
         
     }
 
@@ -38,5 +45,25 @@ public class PlayerController : MonoBehaviour
                 rb2d.AddForce(new Vector2(0,jumpForce), ForceMode2D.Impulse);
             }
         }
+    }
+    void OnTriggerEnter2D (Collider2D other)
+    {
+        if (other.gameObject.CompareTag ("PickUp"))
+        {
+            other.gameObject.SetActive (false);
+            count = count + 1;
+            SetCountText ();
+        }
+
+
+    }
+    void SetCountText ()
+    {
+        countText.text = "Count: " + count.ToString();
+        if (count >= 4)
+        {
+            winText.text = "You Win!";
+        }
+
     }
 }
