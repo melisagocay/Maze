@@ -9,15 +9,22 @@ public class PlayerController : MonoBehaviour
     public float speed;
     private int count;
     public Text countText;
+    public Text livesText;
     public Text winText;
+    private int lives;
+    public Text loseText;
     public float jumpForce;
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D> ();
         count = 0;
+        lives = 3;
+        loseText.text = "";
         winText.text = "";
         SetCountText ();
+        SetLivesText ();
+
         
     }
 
@@ -53,17 +60,39 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive (false);
             count = count + 1;
             SetCountText ();
+            
+        }
+        if (other.gameObject.CompareTag ("Enemy"))
+        {
+            other.gameObject.SetActive (false);
+            lives = lives -1;
+            SetLivesText ();
         }
 
 
     }
     void SetCountText ()
     {
-        countText.text = "Count: " + count.ToString();
-        if (count >= 4)
+        countText.text = "Score: " + count.ToString();
+        if (count >= 8)
         {
             winText.text = "You Win!";
         }
-
+        if (count == 4)
+        {
+            transform.position = new Vector2(-27, 0.4f); 
+            
+        }
+        
+    }
+    void SetLivesText ()
+    {
+        livesText.text = "Lives: " + lives.ToString();
+        if (lives == 0)
+        {
+            loseText.text = "You Lose!";
+        }
+        
+    
     }
 }
