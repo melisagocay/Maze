@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+     public AudioClip musicClipOne;
+    public AudioClip musicClipTwo;
+    public AudioSource musicSource;
     private Rigidbody2D rb2d;
     public float speed;
     private int count;
@@ -24,6 +27,9 @@ public class PlayerController : MonoBehaviour
         winText.text = "";
         SetCountText ();
         SetLivesText ();
+        
+        musicSource.clip = musicClipOne;
+        musicSource.clip = musicClipTwo;
 
         
     }
@@ -31,9 +37,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey("escape"))
-            Application.Quit();
+        if (Input.GetKey("escape")){
 
+            Application.Quit();
+        }
+    
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+             musicSource.clip = musicClipOne;
+            musicSource.Play();
+
+        }
+        
     }
     void FixedUpdate ()
     {
@@ -67,7 +82,9 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive (false);
             lives = lives -1;
             SetLivesText ();
+            
         }
+
 
 
     }
@@ -77,13 +94,19 @@ public class PlayerController : MonoBehaviour
         if (count >= 8)
         {
             winText.text = "You Win!";
+            
         }
         if (count == 4)
         {
             transform.position = new Vector2(-27, 0.4f); 
-            
+            lives = 3;
+            SetLivesText ();
         }
         
+    }
+    void DestroyGameObject()
+    {
+        Destroy(gameObject);
     }
     void SetLivesText ()
     {
@@ -91,6 +114,8 @@ public class PlayerController : MonoBehaviour
         if (lives == 0)
         {
             loseText.text = "You Lose!";
+            Destroy(gameObject);
+            
         }
         
     
